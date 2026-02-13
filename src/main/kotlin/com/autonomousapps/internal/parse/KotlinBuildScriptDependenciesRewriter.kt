@@ -58,12 +58,7 @@ internal class KotlinBuildScriptDependenciesRewriter(
    * Throws [BuildScriptParseException] if the script has some idiosyncrasy that impairs parsing.
    *
    */
-  @Throws(BuildScriptParseException::class)
   override fun rewritten(): String {
-    errorListener.getErrorMessages().ifNotEmpty {
-      throw BuildScriptParseException.withErrors(it)
-    }
-
     return rewriter.text
   }
 

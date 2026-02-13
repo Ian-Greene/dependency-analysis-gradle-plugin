@@ -82,6 +82,7 @@ public abstract class RewriteTask : DefaultTask() {
       buildScript.writeText(newText)
     } catch (e: BuildScriptParseException) {
       logger.warn("Can't fix dependencies for '${projectAdvice.projectPath}': ${e.localizedMessage}")
+      logger.warn("BLOOP")
     }
   }
 
@@ -89,17 +90,17 @@ public abstract class RewriteTask : DefaultTask() {
    * Creates a reversed dependency map that properly handles type-safe project accessors.
    */
    private fun createReversedDependencyMap(
-     map: Map<String, String>, 
+     map: Map<String, String>,
      useTypesafeProjectAccessors: Boolean
    ): (String) -> String {
      val reversedMap = map.reversed()
-     
+
      return { identifier ->
        // First try the regular reversed map
-       reversedMap[identifier] ?: 
+       reversedMap[identifier] ?:
        // If not found and this looks like a type-safe project accessor, try to reverse it
        if (useTypesafeProjectAccessors && identifier.startsWith("projects.")) {
-         // Convert "projects.common.viewmodels" to ":common:viewmodels" 
+         // Convert "projects.common.viewmodels" to ":common:viewmodels"
          val projectPath = identifier.removePrefix("projects.")
            .replace(Regex("([a-z])([A-Z])")) { matchResult ->
              "${matchResult.groupValues[1]}-${matchResult.groupValues[2].lowercase()}"
