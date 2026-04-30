@@ -40,13 +40,6 @@ public abstract class AbstractExtension @Inject constructor(
 
   internal var forceAppProject = false
 
-  internal fun storeAdviceOutput(provider: Provider<RegularFile>) {
-    val output = objects.fileProperty().also {
-      it.set(provider)
-    }
-    adviceOutput.set(output)
-  }
-
   /**
    * Returns the output from the project-level advice.
    *

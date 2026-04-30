@@ -85,7 +85,6 @@ public abstract class GenerateProjectHealthReportTask @Inject constructor(
         useTypesafeProjectAccessors = parameters.useTypesafeProjectAccessors.get(),
       ).text
 
-      output.writeText(consoleText)
     }
   }
 }

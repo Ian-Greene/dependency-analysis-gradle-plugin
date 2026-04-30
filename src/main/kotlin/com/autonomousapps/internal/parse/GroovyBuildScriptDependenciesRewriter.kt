@@ -52,7 +52,8 @@ internal class GroovyBuildScriptDependenciesRewriter private constructor(
     enum class DependencyKind {
       PROJECT,
       FILE,
-      EXTERNAL
+      EXTERNAL,
+      IGNORABLE
     }
 
     fun dependencyKind(): DependencyKind {
@@ -63,7 +64,7 @@ internal class GroovyBuildScriptDependenciesRewriter private constructor(
       } else if (isExternalDependency()) {
         DependencyKind.EXTERNAL
       } else {
-        throw RuntimeException("Unknown dependency kind. Was '$dependency'")
+        DependencyKind.IGNORABLE
       }
     }
 
@@ -75,11 +76,7 @@ internal class GroovyBuildScriptDependenciesRewriter private constructor(
   private var hasDependenciesBlock = false
   private var inBuildscriptBlock = false
 
-  @Throws(BuildScriptParseException::class)
   override fun rewritten(): String {
-    errorListener.errorMessages.ifNotEmpty {
-      throw BuildScriptParseException.withErrors(errorListener.errorMessages)
-    }
     return rewriter.text
   }
 
@@ -180,6 +177,7 @@ internal class GroovyBuildScriptDependenciesRewriter private constructor(
 
       // nothing to change
       DependencyKind.EXTERNAL -> dependency
+      DependencyKind.IGNORABLE -> dependency
     }
 
     return advice.find {

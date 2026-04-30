@@ -1070,7 +1070,7 @@ internal class ProjectPlugin(private val project: Project) {
       t.checkSuperClasses.set(dagpExtension.usageHandler.analysisHandler.checkSuperClasses)
       // Currently only modeling this via Gradle property. May hoist it to the DSL if it's necessary.
       t.checkBinaryCompat.set(checkBinaryCompat())
-      
+
       t.graph.set(graphViewTask.flatMap { it.output })
       t.declarations.set(findDeclarationsTask.flatMap { it.output })
       t.dependencies.set(synthesizeDependenciesTask.flatMap { it.outputDir })
@@ -1205,9 +1205,6 @@ internal class ProjectPlugin(private val project: Project) {
      * Finalizing work.
      */
 
-    // Store the main output in the extension for consumption by end-users
-    storeAdviceOutput(filterAdviceTask.flatMap { it.output })
-
     // Publish our artifacts
     combinedGraphPublisher.publish(mergeProjectGraphsTask.flatMap { it.output })
     projectHealthPublisher.publish(filterAdviceTask.flatMap { it.output })
@@ -1245,11 +1242,6 @@ internal class ProjectPlugin(private val project: Project) {
     pluginManager.hasPlugin(ANDROID_APP_PLUGIN)
       || pluginManager.hasPlugin(ANDROID_LIBRARY_PLUGIN)
       || pluginManager.hasPlugin(ANDROID_TEST_PLUGIN)
-
-  /** Stores advice output in either root extension or subproject extension. */
-  private fun storeAdviceOutput(advice: Provider<RegularFile>) {
-    dagpExtension.storeAdviceOutput(advice)
-  }
 
   private class JavaSources(project: Project, dagpExtension: AbstractExtension) {
 
