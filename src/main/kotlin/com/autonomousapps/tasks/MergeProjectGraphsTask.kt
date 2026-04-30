@@ -28,12 +28,6 @@ public abstract class MergeProjectGraphsTask : DefaultTask() {
   public abstract val output: RegularFileProperty
 
   @TaskAction public fun action() {
-    val output = output.getAndDelete()
 
-    val graph = projectGraphs.get()
-      .map { it.fromJson<GraphContainer>().graph }
-      .reduce { acc, graph -> acc + graph }
-
-    output.bufferWriteJson(GraphContainer(graph))
   }
 }

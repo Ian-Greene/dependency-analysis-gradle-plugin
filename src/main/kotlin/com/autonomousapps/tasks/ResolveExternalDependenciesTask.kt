@@ -88,6 +88,5 @@ public abstract class ResolveExternalDependenciesTask : DefaultTask() {
       .filterIsInstance<ModuleCoordinates>()
       .toSortedSet()
 
-    output.writeText(dependencies.joinToString(separator = "\n") { it.gav() })
   }
 }
